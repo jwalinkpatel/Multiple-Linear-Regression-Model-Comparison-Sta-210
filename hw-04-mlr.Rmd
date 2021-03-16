@@ -1,0 +1,27 @@
+---
+title: "HW 04: Multiple linear regression"
+author: "INSERT NAME"
+date: "INSERT DATE"
+output: 
+  pdf_document: 
+    fig_height: 4
+    fig_width: 6
+---
+
+```{r load-packages, warning = FALSE, message = FALSE}
+# load packages
+```
+
+```{r load-data, warning = FALSE, message = FALSE}
+# load data set
+```
+
+## Part 1 
+
+### Question 1
+
+...
+
+
+## Part 2
+
