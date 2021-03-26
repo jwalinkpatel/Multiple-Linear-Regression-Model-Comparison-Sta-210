@@ -42,8 +42,6 @@ $$R^{2} = \displaystyle \frac{SS_{Model}}{SS_{Total}}$$
 ```
 Thus, $R^2 = 0.005346113$. This means only around 0.53 percent of the variation in the reported hours per day spent sitting is explained by the reported metabolic equivalent unit minutes per week. Since the model only considers one predictor variable to explain variation in sitting hours, this is not a good representation of sitting hours.
 
-## Part 2
-
 ### Question 2
 ```{r}
 m2 <- lm(MTL ~ sitting, data = sitting)
@@ -78,5 +76,17 @@ glance(m3) %>%
 2. Based on AIC, we choose the model with the smaller value of AIC which indicates better fit, which is the first model. This means adding MET and age_cent to our model did not reduce the sum of squares error enough to give us a lower AIC. 
 3. Based on BIC, we choose the model with the smaller value of BIC which indicates better fit, which is again, the first model. This means adding MET and age_cent to our model did not reduce the sum of squares error enough to give us a lower BIC. Note, BIC value is much higher in the second model also because BIC has a greater penalty for the addition of predictor variables to the regression model. 
 
+### Question 5
+```{r}
+houses <- read.csv("data/KingCountyHouses.csv")
+houses <- houses %>% 
+  mutate(waterfront_boolean = as.logical(waterfront))
+ggplot(data = houses, aes(y = price, x = sqft, color=waterfront_boolean,)) +
+geom_point() +
+labs(x = "Area (Square footage)",
+y = "Price (USD)", title = "Price of houses with and without waterfront view in King County given Area in square footage")
+```
+From the visualization, while there is a general positive correlation between price and area of house, we can also see that houses without waterfront (waterfront = false; red color) seem to gain price slower with increasing area, as compared to houses with waterfront (waterfront = true; blue color). Therefore the lines of fit would not appear to be parallel, indicating the presence of an interaction effect happening, such that price in response to the square footage changes differently due to another variable, in this case: whether the house has waterfront view or not.   
 
+## Part 2
 ...
