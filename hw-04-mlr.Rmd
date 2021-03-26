@@ -82,11 +82,55 @@ houses <- read.csv("data/KingCountyHouses.csv")
 houses <- houses %>% 
   mutate(waterfront_boolean = as.logical(waterfront))
 ggplot(data = houses, aes(y = price, x = sqft, color=waterfront_boolean,)) +
-geom_point() +
-labs(x = "Area (Square footage)",
-y = "Price (USD)", title = "Price of houses with and without waterfront view in King County given Area in square footage")
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)+
+  labs(x = "Area (Square footage)",
+       y = "Price (USD)", title = "Price of houses with and without waterfront view in King County given Area in square footage")
 ```
+
 From the visualization, while there is a general positive correlation between price and area of house, we can also see that houses without waterfront (waterfront = false; red color) seem to gain price slower with increasing area, as compared to houses with waterfront (waterfront = true; blue color). Therefore the lines of fit would not appear to be parallel, indicating the presence of an interaction effect happening, such that price in response to the square footage changes differently due to another variable, in this case: whether the house has waterfront view or not.   
+
+### Question 6
+```{r}
+houses <- houses %>%
+  mutate(log_price = log(price))
+```
+$$Model: log(price) = \beta_0 + \beta_1{sqft} + \beta_2{waterfront} + \beta_3{sqft \times waterfront} + \epsilon, such\ that\ \epsilon \sim N(0,\sigma^2_\epsilon)$$
+Now we will regress. 
+```{r}
+houses_model <- lm(log_price ~ sqft + waterfront + sqft*waterfront, data = houses)
+houses_model %>%
+  tidy() %>%
+  kable(digits = 5)
+```
+
+### Question 7
+$$Model: \hat{log(price)} = 12.22424 + 0.00039{(sqft)} + 0.78058{(waterfront)} -0.00005{(sqft \times waterfront)})$$
+Regression equation for no waterfront view: implies $waterfront = 0$
+$$Model: \hat{log(price)} = 12.22424 + 0.00039{(sqft)}$$
+This means for every 1 sqft increase in area of house, we expect price to increase by 
+$100 × (e^0.00039 - 1) = 0.039$ percent, on average. 
+
+Regression equation for yes waterfront view: implies $waterfront = 1$
+$$Model: \hat{log(price)} = 12.22424 + 0.00039{(sqft)} + 0.78058 -0.00005{(sqft)}$$
+This implies that for houses with waterfront view: 
+$$Model: \hat{log(price)} = 13.00482 + 0.00034{(sqft)}$$
+This means for every 1 sqft increase in area of house, we expect price to increase by 
+$100 × (e^0.00034 - 1) = 0.034$ percent on average. 
+
+Let us confirm our observation by plotting log(price) of houses with and without waterfront view in King county given area in sqft. 
+```{r}
+ggplot(data = houses, aes(y = log_price, x = sqft, color=waterfront_boolean,)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)+
+  labs(x = "Area (Square footage)",
+       y = "Log Price (USD)", title = "Log Price of houses with and without waterfront view in King County given Area in square footage")
+```
+This confirms our estimated values of the coefficient estimates for sqft area such that when plotting log(price), the slope is steeper for houses without waterfront houses, compared to houses with waterfront view. 
 
 ## Part 2
 ...
+All in all, in general, we can expect houses in King County to increase in price with increase in area by sqft.
+Houses that do not have waterfront view tend to be cheaper. As their size increases, houses without waterfront view gain value in price at a slower rate than houses with a waterfront view. For Houses with waterfront view, as their size increases, they get expensive much faster than if they did not have a waterfront view. 
+
+
