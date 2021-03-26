@@ -62,8 +62,8 @@ m3 %>%
   tidy(conf.int = TRUE) %>%
   kable (digits = 3, caption = "Prediction of the Medial temporal lobe thickness in mm for subjects given Reported hours per day spent sitting, Reported metabolic equivalent unit minutes per week and Mean centered age")
 ```
-Sitting: The coefficient of sitting is estimated as  -0.021, with expected value ranging from lower bound of -0.040 and upper bound of -0.001. This means we are 95% confident that with every 1 hour increase in Reported hours per day spent sitting for subjects, we can expect the Medial temporal lobe thickness to reduce by 0.001 to 0.040 mm, and reduce by 0.021 mm on average, ceteris paribus. 
-Age: 
+Sitting: The coefficient of sitting is estimated as  -0.021, with value ranging from lower bound of -0.040 and upper bound of -0.001. This means we are 95% confident that with every 1 hour increase in Reported hours per day spent sitting for subjects, we can expect the Medial temporal lobe thickness to reduce by 0.001 to 0.040 mm, and reduce by 0.021 mm on average, ceteris paribus. 
+Age: The coefficient of age is estimated as  0.004, with value ranging from lower bound of -0.004 and upper bound of 0.012. This means we are 95% confident that with every 1 year increase in mean age, we can expect the Medial temporal lobe thickness to change by -0.004 to + 0.012 mm, and + 0.004 mm on average, ceteris paribus. However, the p-value of our predictor age_cent is higher than what our confidence interval of 95% allows (<0.05), thus we should be wary of the explanatory power of age_cent for predicting Medial temporal lobe thickness.  
 
 ### Question 4
 ```{r}
@@ -131,6 +131,6 @@ This confirms our estimated values of the coefficient estimates for sqft area su
 ## Part 2
 ...
 All in all, in general, we can expect houses in King County to increase in price with increase in area by sqft.
-Houses that do not have waterfront view tend to be cheaper. As their size increases, houses without waterfront view gain value in price at a slower rate than houses with a waterfront view. For Houses with waterfront view, as their size increases, they get expensive much faster than if they did not have a waterfront view. 
+On average, houses in our dataset that do not have waterfront view tend to appear cheaper. As their size increases, houses without waterfront view gain value in price at a slower rate than houses with a waterfront view. For Houses with waterfront view, as their size increases, they get expensive much faster than if they did not have a waterfront view. 
 
 
