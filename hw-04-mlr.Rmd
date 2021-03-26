@@ -12,6 +12,7 @@ output:
 library(tidyverse)
 library(broom)
 library(knitr)
+library(patchwork)
 ```
 
 ```{r load-data, warning = FALSE, message = FALSE}
@@ -50,14 +51,32 @@ m2 %>%
   tidy(conf.int = TRUE) %>%
   kable (digits = 3, caption = "Prediction of the Medial temporal lobe thickness in mm for subjects given Reported hours per day spent sitting")
 ```
-The coefficient is estimated as -0.023, with expected value ranging from lower bound of -0.042 and upper bound of -0.004. This means with every 1 hour increase in Reported hours per day spent sitting for subjects, we can expect the Medial temporal lobe thickness to reduce by 0.004 to 0.042 mm, and reduce by 0.023 on average. 
+The coefficient is estimated as -0.023, with expected value ranging from lower bound of -0.042 and upper bound of -0.004. This means we are 95% confident that with every 1 hour increase in Reported hours per day spent sitting for subjects, we can expect the Medial temporal lobe thickness to reduce by 0.004 to 0.042 mm, and reduce by 0.023 mm on average. 
 
+### Question 3
+```{r}
+sitting %>%
+  summarize (mean = mean(age))
+sitting <- sitting %>% 
+  mutate(age_cent = age - 60.37143)
+m3 <- lm(MTL ~ sitting + MET + age_cent, data = sitting)
+m3 %>%
+  tidy(conf.int = TRUE) %>%
+  kable (digits = 3, caption = "Prediction of the Medial temporal lobe thickness in mm for subjects given Reported hours per day spent sitting, Reported metabolic equivalent unit minutes per week and Mean centered age")
+```
+Sitting: The coefficient of sitting is estimated as  -0.021, with expected value ranging from lower bound of -0.040 and upper bound of -0.001. This means we are 95% confident that with every 1 hour increase in Reported hours per day spent sitting for subjects, we can expect the Medial temporal lobe thickness to reduce by 0.001 to 0.040 mm, and reduce by 0.021 mm on average, ceteris paribus. 
+Age: 
 
-
-
-
-
-
+### Question 4
+```{r}
+glance(m2) %>% 
+  select(r.squared, adj.r.squared, AIC, BIC)
+glance(m3) %>% 
+  select(r.squared, adj.r.squared, AIC, BIC)
+```
+1. Based on adjusted $R^2$ we would choose the first model. Even though the second model has higher $R^2$, it has a lower adjusted $R^2$ implying that there the tradeoff/penalty of adding MET and age_cent to our model is greater than their contribution to explanatory power. 
+2. Based on AIC, we choose the model with the smaller value of AIC which indicates better fit, which is the first model. This means adding MET and age_cent to our model did not reduce the sum of squares error enough to give us a lower AIC. 
+3. Based on BIC, we choose the model with the smaller value of BIC which indicates better fit, which is again, the first model. This means adding MET and age_cent to our model did not reduce the sum of squares error enough to give us a lower BIC. Note, BIC value is much higher in the second model also because BIC has a greater penalty for the addition of predictor variables to the regression model. 
 
 
 ...
