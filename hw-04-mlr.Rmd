@@ -1,7 +1,7 @@
 ---
 title: "HW 04: Multiple linear regression"
-author: "INSERT NAME"
-date: "INSERT DATE"
+author: "Jwalin Patel"
+date: "03/24/2021"
 output: 
   pdf_document: 
     fig_height: 4
@@ -9,19 +9,55 @@ output:
 ---
 
 ```{r load-packages, warning = FALSE, message = FALSE}
-# load packages
+library(tidyverse)
+library(broom)
+library(knitr)
 ```
 
 ```{r load-data, warning = FALSE, message = FALSE}
-# load data set
+sitting <- read.csv("data/sitting.csv")
 ```
 
 ## Part 1 
 
 ### Question 1
-
-...
-
+We will use SLR to model MET and sitting as predictor and response variables, respectively. 
+$$Simple\ Linear\ Regression\ Model: sitting = \beta_0 + \beta_1{MET}$$
+```{r}
+m1 <- lm(sitting ~ MET, data = sitting)
+m1 %>%
+  tidy(conf.int = TRUE) %>%
+  kable (digits = 3, caption = "Prediction of the Reported hours per day spent sitting for subjects given reported metabolic equivalent unit minutes per week")
+```
+Now we calculate $R^2$ to consider how well the model fits the relationship between reported hours per day spent sitting and the reported metabolic equivalent unit minutes per week. 
+```{r}
+anova(m1) %>%
+  kable(digits = 3)
+```
+We calculate $R^2$ using the formula:
+$$R^{2} = \displaystyle \frac{SS_{Model}}{SS_{Total}}$$ 
+```{r}
+2.008/(2.008+373.592)
+```
+Thus, $R^2 = 0.005346113$. This means only around 0.53 percent of the variation in the reported hours per day spent sitting is explained by the reported metabolic equivalent unit minutes per week. Since the model only considers one predictor variable to explain variation in sitting hours, this is not a good representation of sitting hours.
 
 ## Part 2
 
+### Question 2
+```{r}
+m2 <- lm(MTL ~ sitting, data = sitting)
+m2 %>%
+  tidy(conf.int = TRUE) %>%
+  kable (digits = 3, caption = "Prediction of the Medial temporal lobe thickness in mm for subjects given Reported hours per day spent sitting")
+```
+The coefficient is estimated as -0.023, with expected value ranging from lower bound of -0.042 and upper bound of -0.004. This means with every 1 hour increase in Reported hours per day spent sitting for subjects, we can expect the Medial temporal lobe thickness to reduce by 0.004 to 0.042 mm, and reduce by 0.023 on average. 
+
+
+
+
+
+
+
+
+
+...
